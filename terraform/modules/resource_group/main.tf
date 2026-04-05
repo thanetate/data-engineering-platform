@@ -1,19 +1,11 @@
 /*
-This is the actual reusable part of the infra code. 
-Instead of hardcoding the resource group in environments/dev, 
-we can wrap it in a Module to reuse.
-
-location - Required, the region 
-name - Required
-managed_by - Optional, the Id of the resource that manages this RG
-tags - Optional
-
-id - this attribute is exported. 
+This is where we actually configure the resource group.
+Using the values passed in by the root variables file.
 */
 
+# "this" , is the local identifier for ONLY inside of this folder.
+# we use it for the outputs file.
 resource "azurerm_resource_group" "this" {
-  name     = var.name
-  location = var.location 
-
-  tags = var.tags
+  name     = var.resource_group_name
+  location = var.resource_group_location
 }

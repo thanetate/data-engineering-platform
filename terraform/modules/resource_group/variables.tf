@@ -1,19 +1,11 @@
 /*
-The module main.tf file should accept inputs instead of hardcoded values. 
+Create variables used in the module, we are basically just defining the schema.
 */
 
-variable "name" {
-  description = "The name of the resource group"
-  type        = string
+variable "resource_group_name" {
+  type = string
 }
 
-variable "location" {
-  description = "Azure region for the resource group"
-  type        = string
-}
-
-variable "tags" {
-  description = "Tags to apply to the resource group"
-  type        = map(string)
-  default     = {}
+variable "resource_group_location" {
+  type = string
 }

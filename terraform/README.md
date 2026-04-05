@@ -22,9 +22,7 @@ modules/
 ├── variables.tf
 └── outputs.tf
 
-We are also going to use an `environments` folder, to keep each environment isolated and maintain best practices.
-
-/environments/dev - is where i will run terraform init/plan/apply.
+We will run all the terraform init, plan, apply in the main terraform folder.
 
 It will also wire all the modules together like:
 module "resource_group" {
@@ -37,5 +35,13 @@ We need to make sure that `AzureRM` is enabled, this will allow us to sign into 
 
 Before running Terraform commands, log into Azure CLI using:
 az login
-or
-az account set --subscription "NAME or ID"
+
+az account show -o table
+
+The azure CLI is tied to the user session, so navigation does not affect its reach.
+You can check its expiry date by
+az account get-access-token --query exiresOn -o tsv
+You can log out by
+az logout
+
+-o tells the azure CLI to print the output as tab seperated values instead of JSON.
