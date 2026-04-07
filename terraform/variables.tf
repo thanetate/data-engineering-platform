@@ -27,3 +27,13 @@ variable "storage_account_replication" {
   type        = string
   description = "Storage account replication type"
 }
+
+variable "storage_container_name" {
+  type        = string
+  description = "Storage container name for raw Kaggle data"
+}
+
+variable "storage_container_access_type" {
+  type        = string
+  description = "Storage container access type (private, blob, or container)"
+}

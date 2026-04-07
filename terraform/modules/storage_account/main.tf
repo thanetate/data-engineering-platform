@@ -12,3 +12,9 @@ resource "azurerm_storage_account" "this" {
   account_tier             = var.storage_account_tier
   account_replication_type = var.storage_account_replication
 }
+
+resource "azurerm_storage_container" "this" {
+  name                  = var.storage_container_name
+  storage_account_name  = azurerm_storage_account.this.name
+  container_access_type = var.storage_container_access_type
+}

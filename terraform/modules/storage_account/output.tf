@@ -11,4 +11,8 @@ output "storage_account_location" {
   value = azurerm_storage_account.this.location
 }
 
+output "storage_container_name" {
+  value = azurerm_storage_container.this.name
+}
+
 

@@ -39,9 +39,11 @@ module "storage_account" {
   source = "./modules/storage_account"
 
   # what the module expects = what we are passing in 
-  storage_account_name        = var.storage_account_name
-  resource_group_name         = module.resource_group.resource_group_name
-  storage_account_location    = module.resource_group.resource_group_location
-  storage_account_tier        = var.storage_account_tier
-  storage_account_replication = var.storage_account_replication
+  storage_account_name          = var.storage_account_name
+  resource_group_name           = module.resource_group.resource_group_name
+  storage_account_location      = module.resource_group.resource_group_location
+  storage_account_tier          = var.storage_account_tier
+  storage_account_replication   = var.storage_account_replication
+  storage_container_name        = var.storage_container_name
+  storage_container_access_type = var.storage_container_access_type
 }

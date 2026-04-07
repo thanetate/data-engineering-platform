@@ -18,3 +18,7 @@ output "storage_account_name" {
 output "storage_account_location" {
   value = module.storage_account.storage_account_location
 }
+
+output "storage_container_name" {
+  value = module.storage_account.storage_container_name
+}
