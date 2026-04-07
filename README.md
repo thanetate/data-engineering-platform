@@ -43,3 +43,20 @@ To get started:
 
    \*Note, to log out you can use this command.
    az logout
+
+4. Export the subsciption ID in the same shell, for the azure provider to use.
+   export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+5. Now you can run
+   terraform init
+   - initializes the backend, modules, provider plugins
+   - creates a lock file `.terraform.lock.hcl` to record the provider selections. \*keep in repo
+
+   terraform plan
+   - uses the providers to generate an execution plan
+   - telling you what actions terraform will perform
+
+   terraform apply
+   - telling you what actions terraform will perform
+   - you confirm with "yes"
+   - will create the resource and show the outputs

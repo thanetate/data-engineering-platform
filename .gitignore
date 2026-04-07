@@ -1,0 +1,16 @@
+# Terraform local cache and provider binaries
+terraform/.terraform/
+
+# Terraform state files
+terraform/*.tfstate
+terraform/*.tfstate.*
+
+# Terraform variable overrides and local secrets
+terraform/*.auto.tfvars
+terraform/*.auto.tfvars.json
+terraform/override.tf
+terraform/override.tf.json
+terraform/*_override.tf
+terraform/*_override.tf.json
+terraform/.terraformrc
+terraform/terraform.rc
