@@ -120,3 +120,8 @@ You should see something like this:
 scripts [main●●] % python3 ingest_csv_to_blob.py
 Uploaded Successfully
 Uploaded Successfully
+
+#### 3. connect git to databricks
+
+We now connect Databricks to our repository using the git folder
+We also need to get the Databricks extension to vs code
