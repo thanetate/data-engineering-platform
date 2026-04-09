@@ -37,3 +37,25 @@ variable "storage_container_access_type" {
   type        = string
   description = "Storage container access type (private, blob, or container)"
 }
+
+variable "databricks_workspace_name" {
+  type        = string
+  description = "Azure databricks workspace name"
+}
+
+variable "databricks_workspace_sku" {
+  type        = string
+  description = "Azure databricks workspace sku"
+}
+
+variable "databricks_access_connector_name" {
+  type        = string
+  description = "Azure databricks access connector name"
+}
+
+variable "databricks_access_connector_identity" {
+  type        = string
+  description = "Azure databricks connector identity"
+}
+
+

@@ -68,6 +68,24 @@ To get started:
    - you confirm with "yes"
    - will create the resource and show the outputs
 
+   Databricks infra:
+   Azure creates the databricks workspace resources, databricks manages the workspace internals
+   We will use azurerm for providing the Azure databricks workspace itself
+   We will use databricks for providing the internals like (clusters, notebooks, ect)
+   An important note, we are logging into and authenticating into databricks via Azure storage account.
+   Meaning that it is tied to my subscription in Azure.
+
+   Azure Databricks != Datbricks \*Talk about this in my post
+
+   We will use the Databricks Access Connector to bridge the data between Azure and Databricks
+   We need to again make sure that the access connector has "Storage Blob Data Contributor" permissions.
+   1. Set up correct permissions in Azure Portal
+   1. Go to your storage account
+   1. Managed Identities (IAM)
+   1. Add +
+   1. Storage Blob Data Container
+   1. The databricks access connector
+
 #### 2. upload kaggle dataset to azure blob container
 
 We are using this script to load 2 datasets from kaggle into our Azure Blob Storage Container.
