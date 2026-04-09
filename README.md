@@ -84,7 +84,8 @@ To get started:
    1. Managed Identities (IAM)
    1. Add +
    1. Storage Blob Data Container
-   1. The databricks access connector
+   1. Managed Identity
+   1. the databricks access connector
 
 #### 2. upload kaggle dataset to azure blob container
 
