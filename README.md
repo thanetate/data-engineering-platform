@@ -2,7 +2,14 @@
 
 I am building this project to get some hands on experience with the core tools used in data engineering teams.
 
-It’s a small end to end pipeline where I provision Azure resources using Terraform, store data from Kaggle in an Azure Data Lake, then load the data into Databricks, transform it with PySpark and SQL, and turn it into something that can actually be used for analytics.
+It’s a small end to end pipeline where I provision Azure resources using Terraform, store data from Kaggle in Azure Blob, then load the data into Databricks, transform it with PySpark and SQL, and turn it into something that can actually be used for analytics.
+
+In Azure, to store raw files from Kaggle we need to create:
+
+1. Azure Subscription
+2. Azure Resource Group
+3. Azure Storage Account
+4. Azure Container (Inside the Storage Account)
 
 #### steps
 
@@ -60,3 +67,37 @@ To get started:
    - telling you what actions terraform will perform
    - you confirm with "yes"
    - will create the resource and show the outputs
+
+#### 2. upload kaggle dataset to azure blob container
+
+We are using this script to load 2 datasets from kaggle into our Azure Blob Storage Container.
+The data relates to Climbing Athletes data from 1991 to 2024, specifically the IFSC World Cup competition data.
+
+ingest_csv_to_blob.py
+
+BlobServiceClient() allows us to manipulate Azure Storage Resources and Blob Containers
+ContainerClient() allows us to manipulate Azure Storage Containers and Blob
+BlobClient() allows us to manipulate Azure Storage Blob
+DefaultAzureCredential() allows us to implement passwordless connection to Azure
+
+1. Set up correct permissions in Azure Portal
+   1. Go to your storage account
+   2. Managed Identities (IAM)
+   3. Add +
+   4. Storage Blob Data Container
+   5. Assign access to your Microsoft Entra Username
+
+2. Install required python packages
+   pip install azure-storage-blob azure-identity
+
+3. Log into Azure CLI
+   Passwordless Auth is recommended so we are going to use
+   Az login
+
+4. Run python script
+   python3 ingest_csv_to_blob.py
+
+You should see something like this:
+scripts [main●●] % python3 ingest_csv_to_blob.py
+Uploaded Successfully
+Uploaded Successfully
