@@ -1,4 +1,4 @@
-### databricks data platform
+### Databricks Data Platform
 
 I am building this project to get some hands on experience with the core tools used in data engineering teams.
 
