@@ -1,0 +1,381 @@
+{
+  "datasets": [
+    {
+      "name": "country_perf",
+      "displayName": "Country Performance",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  new_databricks_workspace.default.gold_country_performance"
+      ]
+    },
+    {
+      "name": "athlete_career",
+      "displayName": "Athlete Career",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  new_databricks_workspace.default.gold_general_career\n"
+      ],
+      "columns": [
+        {
+          "displayName": "Full Name",
+          "description": "Athlete full name",
+          "expression": "CONCAT(`firstname`, ' ', `lastname`)"
+        }
+      ]
+    },
+    {
+      "name": "medal_types",
+      "displayName": "Medal Types",
+      "queryLines": [
+        "SELECT\n",
+        "  'Gold' AS medal_type,\n",
+        "  SUM(gold_medals) AS medal_count\n",
+        "FROM\n",
+        "  new_databricks_workspace.default.gold_country_performance\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'Silver',\n",
+        "  SUM(silver_medals)\n",
+        "FROM\n",
+        "  new_databricks_workspace.default.gold_country_performance\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'Bronze',\n",
+        "  SUM(bronze_medals)\n",
+        "FROM\n",
+        "  new_databricks_workspace.default.gold_country_performance"
+      ]
+    },
+    {
+      "name": "9d1d32c2",
+      "displayName": "Athlete Ranking",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  new_databricks_workspace.default.gold_general_career\n",
+        "ORDER BY total_podiums DESC\n",
+        "LIMIT 10\n"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "bdb145a5",
+      "displayName": "Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "title",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## IFSC Climbing Competitions (1991 - 2024)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "total_athletes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "athlete_career",
+                  "fields": [
+                    {
+                      "name": "count(athlete_id)",
+                      "expression": "COUNT(`athlete_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Athletes",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(athlete_id)",
+                  "displayName": "Athletes"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total_countries",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "country_perf",
+                  "fields": [
+                    {
+                      "name": "count(country)",
+                      "expression": "COUNT(`country`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Countries Represented",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(country)",
+                  "displayName": "Countries"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "top_countries_medals",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "country_perf",
+                  "fields": [
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "sum(total_medals)",
+                      "expression": "SUM(`total_medals`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Top 15 Countries by Total Medals",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "country",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Country",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_medals)",
+                  "displayName": "Total Medals",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "country",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "top_athletes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9d1d32c2",
+                  "fields": [
+                    {
+                      "name": "firstname",
+                      "expression": "`firstname`"
+                    },
+                    {
+                      "name": "lastname",
+                      "expression": "`lastname`"
+                    },
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "total_competitions",
+                      "expression": "`total_competitions`"
+                    },
+                    {
+                      "name": "gold_medals",
+                      "expression": "`gold_medals`"
+                    },
+                    {
+                      "name": "silver_medals",
+                      "expression": "`silver_medals`"
+                    },
+                    {
+                      "name": "bronze_medals",
+                      "expression": "`bronze_medals`"
+                    },
+                    {
+                      "name": "total_podiums",
+                      "expression": "`total_podiums`"
+                    },
+                    {
+                      "name": "podium_percentage",
+                      "expression": "`podium_percentage`"
+                    },
+                    {
+                      "name": "gender",
+                      "expression": "`gender`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`gender` IN ('female')"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Top Athletes by Podium Finishes",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "firstname"
+                  },
+                  {
+                    "fieldName": "lastname"
+                  },
+                  {
+                    "fieldName": "country",
+                    "displayName": "Country"
+                  },
+                  {
+                    "fieldName": "total_competitions",
+                    "displayName": "Competitions"
+                  },
+                  {
+                    "fieldName": "gold_medals",
+                    "displayName": "Gold"
+                  },
+                  {
+                    "fieldName": "silver_medals",
+                    "displayName": "Silver"
+                  },
+                  {
+                    "fieldName": "bronze_medals",
+                    "displayName": "Bronze"
+                  },
+                  {
+                    "fieldName": "total_podiums",
+                    "displayName": "Total Podiums"
+                  },
+                  {
+                    "fieldName": "podium_percentage",
+                    "displayName": "Podium %"
+                  },
+                  {
+                    "fieldName": "gender",
+                    "displayName": "Gender"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "visualizationColors": [
+        "#2E86AB",
+        "#A23B72",
+        "#F18F01",
+        "#C73E1D",
+        "#3B1F2B",
+        "#44BBA4",
+        "#E94F37",
+        "#393E41",
+        "#D4A373",
+        "#6A4C93"
+      ],
+      "widgetHeaderAlignment": "LEFT"
+    },
+    "applyModeEnabled": false
+  }
+}
