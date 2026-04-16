@@ -8,7 +8,7 @@ resource_group_name     = "a00001-resource-group"
 resource_group_location = "Central US"
 
 storage_account_name                 = "dpstoragea00001"
-storage_account_tier                 = "Standard"
+storage_account_tier                 = "Premium"
 storage_account_replication          = "LRS"
 storage_container_name               = "a00001-container"
 storage_container_access_type        = "private"
