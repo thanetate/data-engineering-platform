@@ -125,3 +125,14 @@ Uploaded Successfully
 
 We now connect Databricks to our repository using the git folder
 We also need to get the Databricks extension to vs code
+
+Enable Unity catalog in azure databricks
+
+1. make sure you are a global administrator
+2. must have a premium databricks workspace
+3. create ALDS Gen2 Storage Contaienr (hierarchial namespace)
+4. use access connector (give it Storage Blob Contributer Acess for the Managed Identity)
+5. create a metastore using access connector and storage accoutn
+
+We need an account with databricks to manage the workspace
+
