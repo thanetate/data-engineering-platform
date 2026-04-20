@@ -1,94 +1,94 @@
-### Databricks Data Platform
+### Data Engineering Platform
 
-I am building this project to get some hands on experience with the core tools used in data engineering teams.
+I’ve been working in the data engineering space for about a year and wanted to deepen my understanding of modern tools like Azure, Databricks, Apache Spark (PySpark), and Terraform. Thats why I built a small end-to-end data engineering pipeline that simulates a real-world production workflow.
 
-It’s a small end to end pipeline where I provision Azure resources using Terraform, store data from Kaggle in Azure Blob, then load the data into Databricks, transform it with PySpark and SQL, and turn it into something that can actually be used for analytics.
+**What I built:**
+**1. Infrastructure with Terraform**
+Provisioned these Azure Resources using infrastructure as code (IAC):
 
-In Azure, to store raw files from Kaggle we need to create:
+1. Azure Resource Group
+2. Azure Storage Account
+3. Azure Databricks Access Connector
+4. Azure Databricks Workspace
 
-1. Azure Subscription
-2. Azure Resource Group
-3. Azure Storage Account
-4. Azure Container (Inside the Storage Account)
+I have opted for a module like structure, so that we can organize and re-use these terraform scripts.
 
-#### steps
-
-#### 1. terraform
-
-I wanted to use terraform to set up all my infrastructure for Azure and Databricks using Infrastructure As Code (IAC).
-I have decided to keep it simple, but also incorporate some best practices into my terraform scripts. Using Modules, I can set an abstract 'template' of what each resource should look like. So that, in the future I can re-use these modules to create more infrastrucute.
-
-This is file structure I have opted for:
-
-terraform/
-├── main.tf
-├── variables.tf  
-├── outputs.tf
-├── modules/
-│ ├── resource_group/
-│ │ ├── main.tf
-│ │ ├── variables.tf
-│ │ └── outputs.tf
-│ ├── storage_account/
-│ │ ├── main.tf
-│ │ ├── variables.tf
-│ │ └── outputs.tf
+```text
+├── terraform/
+    ├── main.tf
+    ├── variables.tf
+    ├── outputs.tf
+    └── modules/
+        ├── resource_group/
+        ├── storage_account/
+        ├── databricks_workspace/
+        └── databricks_access_connector/
+```
 
 To get started:
 
 1. Install the Azure CLI, if you haven't already.
+
+   ```bash
    brew install azure-cli
+   ```
 
 2. Log into the Azure CLI.
+
+   ```bash
    az login
+   ```
 
 3. This is to check that you have done it correctly.
-   az account show -o table
-   or
-   -o tells the azure CLI to print the output as tab seperated values instead of JSON.
-   az account get-access-token --query exiresOn -o tsv
 
-   \*Note, to log out you can use this command.
-   az logout
+```bash
+  az account show -o table
+```
+
+or
+-o tells the azure CLI to print the output as tab seperated values instead of JSON.
+
+```bash
+  az account get-access-token --query exiresOn -o tsv
+```
+
+\*Note, to log out you can use this command.
+
+```bash
+az logout
+```
 
 4. Export the subsciption ID in the same shell, for the azure provider to use.
+
+```bash
    export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+```
 
 5. Now you can run
+
+```bash
    terraform init
-   - initializes the backend, modules, provider plugins
-   - creates a lock file `.terraform.lock.hcl` to record the provider selections. \*keep in repo
+```
 
+- initializes the backend, modules, provider plugins
+- creates a lock file `.terraform.lock.hcl` to record the provider selections
+
+```bash
    terraform plan
-   - uses the providers to generate an execution plan
-   - telling you what actions terraform will perform
+```
 
+- uses the providers to generate an execution plan
+- telling you what actions terraform will perform
+
+```bash
    terraform apply
-   - telling you what actions terraform will perform
-   - you confirm with "yes"
-   - will create the resource and show the outputs
+```
 
-   Databricks infra:
-   Azure creates the databricks workspace resources, databricks manages the workspace internals
-   We will use azurerm for providing the Azure databricks workspace itself
-   We will use databricks for providing the internals like (clusters, notebooks, ect)
-   An important note, we are logging into and authenticating into databricks via Azure storage account.
-   Meaning that it is tied to my subscription in Azure.
+- telling you what actions terraform will perform
+- you confirm with "yes"
+- will create the resource and show the outputs
 
-   Azure Databricks != Datbricks \*Talk about this in my post
-
-   We will use the Databricks Access Connector to bridge the data between Azure and Databricks
-   We need to again make sure that the access connector has "Storage Blob Data Contributor" permissions.
-   1. Set up correct permissions in Azure Portal
-   1. Go to your storage account
-   1. Managed Identities (IAM)
-   1. Add +
-   1. Storage Blob Data Container
-   1. Managed Identity
-   1. the databricks access connector
-
-#### 2. upload kaggle dataset to azure blob container
-
+**2. Cloud Storage Layer**
 We are using this script to load 2 datasets from kaggle into our Azure Blob Storage Container.
 The data relates to Climbing Athletes data from 1991 to 2024, specifically the IFSC World Cup competition data.
 
@@ -98,6 +98,9 @@ BlobServiceClient() allows us to manipulate Azure Storage Resources and Blob Con
 ContainerClient() allows us to manipulate Azure Storage Containers and Blob
 BlobClient() allows us to manipulate Azure Storage Blob
 DefaultAzureCredential() allows us to implement passwordless connection to Azure
+
+**3. Azure to Databricks Integration**
+Configured an Azure Databricks Access Connector with Unity Catalog to securely access data stored in ADLS Gen2 from my Databricks workspace.
 
 1. Set up correct permissions in Azure Portal
    1. Go to your storage account
@@ -121,18 +124,10 @@ scripts [main●●] % python3 ingest_csv_to_blob.py
 Uploaded Successfully
 Uploaded Successfully
 
-#### 3. connect git to databricks
+**4. Data Processing & Transformation (Databricks)**
+Built a ingestion job to load data into Databricks tables and used PySpark to transform it through a medallion architecture (Bronze → Silver → Gold). Finally, I created a dashboard to analyze insights from the Gold layer.
 
-We now connect Databricks to our repository using the git folder
-We also need to get the Databricks extension to vs code
+**What I learned:**
+The main thing I learned outside of Databricks, Apache Spark (PySpark), and Terraform was cloud security and identity management. I worked with managed identities and learned how they can replace traditional key-based authentication, removing the need for key rotation.
 
-Enable Unity catalog in azure databricks
-
-1. make sure you are a global administrator
-2. must have a premium databricks workspace
-3. create ALDS Gen2 Storage Contaienr (hierarchial namespace)
-4. use access connector (give it Storage Blob Contributer Acess for the Managed Identity)
-5. create a metastore using access connector and storage accoutn
-
-We need an account with databricks to manage the workspace
-
+The main thing I learned outside of the basics of Databricks, Apache Spark (PySpark), and Terraform was security and how to provision managed identities. I also learned how managed identies can be used instead of traditional keys which require manual intervention to rotate ect.
