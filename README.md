@@ -1,17 +1,17 @@
 ### Data Engineering Platform (Azure, Databricks, PySpark)
 
-I’ve been working in the data engineering space for about a year and wanted to deepen my understanding of modern tools like Azure, Databricks, Apache Spark (PySpark), and Terraform. Thats why I built a small end-to-end data engineering pipeline that simulates a real-world production workflow.
+I’ve been working in the data engineering space for about a year and wanted to deepen my understanding of modern tools like Azure, Databricks, Apache Spark (PySpark), and Terraform. That’s why I built a small end-to-end data engineering pipeline that simulates a real-world production workflow.
 
 #### 1. Infrastructure with Terraform
 
-Provisioned Azure Resources using infrastructure as code (IAC):
+Provisioned Azure resources using Infrastructure as Code (IaC):
 
 1. Azure Resource Group
 1. Azure Storage Account
 1. Azure Databricks Access Connector
 1. Azure Databricks Workspace
 
-I have opted for a module structure, so that I can organize and reuse these terraform scripts.
+I opted for a modular structure to better organize and reuse Terraform scripts:
 
 ```text
 ├── terraform/
@@ -27,65 +27,48 @@ I have opted for a module structure, so that I can organize and reuse these terr
 
 To get started:
 
-1. Install the Azure CLI, if you haven't already
+1. Install the Azure CLI (if you haven't already):
 
    ```bash
    brew install azure-cli
    ```
 
-2. Log into the Azure CLI
+2. Log in:
 
    ```bash
    az login
    ```
 
-3. Check if it worked
+3. Verify login:
 
    ```bash
    az account show -o table
    # or
    az account get-access-token --query exiresOn -o tsv
-   # -o tells the Azure CLI to print the output as a tab seperated values
+   # -o outputs results as tab-separated values
    ```
 
-4. Export the subsciption ID in the same terminal window, for the azure provider to use
+4. Export your subscription ID:
 
    ```bash
    export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
    ```
 
-5. Now you can run
-
-   Initializes the backend, modules, provider plugins.
-
-   Creates a lock file `.terraform.lock.hcl` to record the provider selections.
+5. Run Terraform:
 
    ```bash
-   terraform init
-   ```
-
-   Uses the providers to generate an execution plan.
-
-   Tells you what actions terraform will perform.
-
-   ```bash
-   terraform plan
-   ```
-
-   Tells you what actions terraform will perform.
-
-   Terraform will create the resource and show the outputs.
-
-   ```bash
-   terraform apply
+   terraform init   # Initializes backend, modules, and providers
+   terraform plan   # Shows execution plan
+   terraform apply  # Creates resources and outputs results
    ```
 
 #### 2. Cloud Storage Layer
 
-We are using this script to load some datasets from kaggle into our Azure Data Lake Storage Gen2 container.
-The data relates to climbing athletes data from 1991 to 2024, specifically the IFSC World Cup competition data.
+Used a Python script to ingest datasets from Kaggle into an Azure Data Lake Storage Gen2 container.
 
-Python script:
+The dataset contains climbing athlete data from 1991 to 2024, specifically IFSC World Cup competition data.
+
+Script:
 
 ```text
 ingest_csv_to_blob.py
@@ -93,22 +76,27 @@ ingest_csv_to_blob.py
 
 #### 3. Azure to Databricks Integration
 
-Configured an Azure Databricks Access Connector with the Unity Catalog in Databricks to securely access data stored in ADLS Gen2 from my Databricks workspace.
+Configured an Azure Databricks Access Connector with Unity Catalog to securely access data stored in ADLS Gen2.
 
-To get started:
+Steps:
 
-1. Once you have created the Azure Databricks Access Connector, it should generate a system-assigned managed identity tied to the access connector.
+1. After creating the Access Connector, a system-assigned managed identity is generated.
 
-2. Navigate to your Access Control (IAM) within the Storage Account you created. Assign the role "Storage Blob Data Contributor" to the access connector's managed identity.
+2. In the Storage Account IAM settings, assign the role:
+   "Storage Blob Data Contributor" to the managed identity.
 
-3. In your Databricks workspace we need to create a credential within the Unity Catalog. This connects the access connector to the catalog.
+3. In Databricks, create a credential in Unity Catalog to link the connector.
+
+Architecture flow:
 
 ```text
-Databricks → Unity Catalog Credential → Access Connector → Storage Account (ADLS Gen2)
+Databricks → Unity Catalog Credential → Access Connector → ADLS Gen2
 ```
 
 #### 4. Data Processing & Transformation (Databricks)
 
-Built a ingestion job to load data into Databricks tables, then used PySpark to transform it through a medallion architecture (Bronze, Silver, Gold). Finally, I created a dashboard to analyze insights from the Gold layer.
+Built an ingestion job to load data into Databricks tables, then used PySpark to transform it using a medallion architecture (Bronze, Silver, and Gold).
+
+Finally, created a dashboard to analyze insights from the Gold layer.
 
 ### Demo
