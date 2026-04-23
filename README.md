@@ -56,27 +56,29 @@ To get started:
 
 5. Now you can run
 
+   Initializes the backend, modules, provider plugins.
+
+   Creates a lock file `.terraform.lock.hcl` to record the provider selections.
+
    ```bash
    terraform init
    ```
 
-- initializes the backend, modules, provider plugins
-- creates a lock file `.terraform.lock.hcl` to record the provider selections
+   Uses the providers to generate an execution plan.
 
-  ```bash
-  terraform plan
-  ```
+   Tells you what actions terraform will perform.
 
-- uses the providers to generate an execution plan
-- telling you what actions terraform will perform
+   ```bash
+   terraform plan
+   ```
 
-  ```bash
-  terraform apply
-  ```
+   Tells you what actions terraform will perform.
 
-- telling you what actions terraform will perform
-- you confirm with "yes"
-- will create the resource and show the outputs
+   Terraform will create the resource and show the outputs.
+
+   ```bash
+   terraform apply
+   ```
 
 #### 2. Cloud Storage Layer
 
@@ -96,13 +98,17 @@ Configured an Azure Databricks Access Connector with the Unity Catalog in Databr
 To get started:
 
 1. Once you have created the Azure Databricks Access Connector, it should generate a system-assigned managed identity tied to the access connector.
+
 2. Navigate to your Access Control (IAM) within the Storage Account you created. Assign the role "Storage Blob Data Contributor" to the access connector's managed identity.
+
 3. In your Databricks workspace we need to create a credential within the Unity Catalog. This connects the access connector to the catalog.
 
-Databricks → Unity Catalog credential → Access Connector → Managed Identity → Azure IAM → Storage Account
+```text
+Databricks → Unity Catalog Credential → Access Connector → Storage Account (ADLS Gen2)
+```
 
 #### 4. Data Processing & Transformation (Databricks)
 
-Built a ingestion job to load data into Databricks tables and used PySpark to transform it through a medallion architecture (Bronze, Silver, Gold). Finally, I created a dashboard to analyze insights from the Gold layer.
+Built a ingestion job to load data into Databricks tables, then used PySpark to transform it through a medallion architecture (Bronze, Silver, Gold). Finally, I created a dashboard to analyze insights from the Gold layer.
 
 ### Demo
