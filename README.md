@@ -100,6 +100,6 @@ Built an ingestion job to load data into Databricks tables, then used PySpark to
 Finally, created a dashboard to analyze insights from the Gold layer.
 
 ### Demo
-<img width="1000" height="auto" alt="image" src="https://github.com/user-attachments/assets/dd24e9d3-34a1-4bef-b35c-0fd3d7f3a43e" />
+<img width="1000" height="auto" alt="image" src="https://github.com/user-attachments/assets/1d27d53f-6575-4325-a1e6-dbf58518c97f" />
 <img width="1000" height="auto" alt="image" src="https://github.com/user-attachments/assets/be4bb474-f4e8-45f2-b835-79655eefb626" />
 <img width="1000" height="auto" alt="image" src="https://github.com/user-attachments/assets/3d7b8387-6b0e-4589-bfb2-615313fcd03f" />
